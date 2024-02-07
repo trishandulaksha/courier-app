@@ -9,8 +9,7 @@ let enteredPassword: string = "";
 export const passwordValidate = (
   data: string,
   setError: (error: boolean) => void,
-  setErrMsg: (errMsg: string[]) => void,
-  errMsgBase: string
+  setErrMsg: (errMsg: string[]) => void
 ) => {
   const password = String(data).split("");
   enteredPassword = data;
@@ -34,8 +33,32 @@ export const passwordValidate = (
         hasNumberChar = true;
       }
     });
+
+    if (hasCapitalChar && hasSymboleChar && hasNumberChar && hasSimpleChar) {
+      setError(false);
+    } else {
+      setError(true);
+      newErrMsgArray.push("Please enter a simple,capital,symbols and numbers");
+    }
   } else {
     setError(true);
-    setErrMsg(["password must be at least 8 characters"]);
+    newErrMsgArray.push("Passoword length must be a 8 character");
+  }
+
+  setErrMsg(newErrMsgArray);
+};
+
+export const confirmPasswordValidate = (
+  data: string,
+  setError: (error: boolean) => void,
+  setErrMsg: (errMsg: string[]) => void
+) => {
+  if (!data && data.length < 0) {
+    if (data !== enteredPassword) {
+      setError(true);
+      setErrMsg(["Passwords do not match"]);
+    }
+  } else {
+    setError(false);
   }
 };

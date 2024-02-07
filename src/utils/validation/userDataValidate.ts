@@ -31,7 +31,7 @@ export const userDataValidate = (
   } else {
     setError(true);
 
-    newErrMsgArray.push("please enter your user name");
+    newErrMsgArray.push("Please enter your user name");
   }
   setErrMsg(newErrMsgArray);
 };
