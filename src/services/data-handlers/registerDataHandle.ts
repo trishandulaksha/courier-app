@@ -1,4 +1,4 @@
-import { loginUser, registerUser } from "../API";
+import { registerUser } from "../API";
 
 export interface registerUserProps {
   name: string;
