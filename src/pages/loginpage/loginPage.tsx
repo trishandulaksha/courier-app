@@ -10,6 +10,9 @@ import {
   passwordValidate,
 } from "../../utils/validation/passwordValidate";
 
+import { loginHandle } from "../../services/data-handlers/loginDataHandle";
+import { handleRegister } from "../../services/data-handlers/registerDataHandle";
+
 // ////////////////////////////
 // LOGIN COMPONENT ////////////////////////////////
 // ///////////////////////////
@@ -101,6 +104,17 @@ export const LoginPage = () => {
 // ///////////////////////////
 
 export const LoginUnit = () => {
+  const [dbResponse, setDBResponse] = useState<{
+    error: string | null;
+    success: boolean;
+  }>({
+    error: null,
+    success: true,
+  });
+
+  const [canSubmit, setCanSubmit] = useState<boolean>(true);
+  const { error, success } = dbResponse;
+
   return (
     <>
       <div>
@@ -108,7 +122,12 @@ export const LoginUnit = () => {
           Sign in
         </h1>
       </div>
-      <form>
+      <div>
+        {!success ? (
+          <h3 className="font-semibold text-center text-red-600">{error}</h3>
+        ) : null}
+      </div>
+      <form onSubmit={(e) => loginHandle(e, setDBResponse, canSubmit)}>
         <div>
           <InputFieldUnit
             type="text"
@@ -116,6 +135,7 @@ export const LoginUnit = () => {
             placeholder="User Name"
             name="User_Name"
             errMsgBase="username"
+            setCanSubmit={setCanSubmit}
           />
           <InputFieldUnit
             type="password"
@@ -123,6 +143,7 @@ export const LoginUnit = () => {
             placeholder="Password"
             name="Password"
             errMsgBase="pwd"
+            setCanSubmit={setCanSubmit}
           />
         </div>
         <div className="mt-4 text-center">
@@ -140,6 +161,15 @@ export const LoginUnit = () => {
 // ///////////////////////////
 
 export const RegisterUnit = () => {
+  const [dbResponse, setDBResponse] = useState<{
+    error: string | null;
+    success: boolean;
+  }>({
+    error: null,
+    success: true,
+  });
+  const [canSubmit, setCanSubmit] = useState<boolean>(true);
+  const { error, success } = dbResponse;
   return (
     <>
       <div>
@@ -147,7 +177,12 @@ export const RegisterUnit = () => {
           Sign up
         </h1>
       </div>
-      <form>
+      <div>
+        {!success ? (
+          <h3 className="font-semibold text-center text-red-600">{error}</h3>
+        ) : null}
+      </div>
+      <form onSubmit={(e) => handleRegister(e, setDBResponse, canSubmit)}>
         <div>
           <InputFieldUnit
             type="text"
@@ -155,6 +190,7 @@ export const RegisterUnit = () => {
             placeholder="User Name"
             name="User_Name"
             errMsgBase="username"
+            setCanSubmit={setCanSubmit}
           />
           <InputFieldUnit
             type="email"
@@ -162,6 +198,7 @@ export const RegisterUnit = () => {
             placeholder="Email "
             name="Email"
             errMsgBase="email"
+            setCanSubmit={setCanSubmit}
           />
           <InputFieldUnit
             type="password"
@@ -169,6 +206,7 @@ export const RegisterUnit = () => {
             placeholder="Password"
             name="Password"
             errMsgBase="pwd"
+            setCanSubmit={setCanSubmit}
           />
           <InputFieldUnit
             type="password"
@@ -176,6 +214,7 @@ export const RegisterUnit = () => {
             placeholder="Confirm Password"
             name="Confirm_Password"
             errMsgBase="cpwd"
+            setCanSubmit={setCanSubmit}
           />
         </div>
         <div className="mt-4 text-center ">
@@ -198,6 +237,7 @@ interface InputFieldProps {
   name: string;
   placeholder: string;
   errMsgBase: string;
+  setCanSubmit: (canSubmit: boolean) => void;
 }
 
 export const InputFieldUnit = ({
@@ -206,6 +246,7 @@ export const InputFieldUnit = ({
   name,
   placeholder,
   errMsgBase,
+  setCanSubmit,
 }: InputFieldProps) => {
   const [error, setError] = useState<boolean>(false);
   const [errMsg, setErrMsg] = useState<string[]>([]);
@@ -229,19 +270,34 @@ export const InputFieldUnit = ({
                       e.target.value,
                       setError,
                       setErrMsg,
-                      errMsgBase
+                      errMsgBase,
+                      setCanSubmit
                     )
                   : errMsgBase === "email"
-                  ? emailValidate(e.target.value, setError, setErrMsg)
+                  ? emailValidate(
+                      e.target.value,
+                      setError,
+                      setErrMsg,
+                      setCanSubmit
+                    )
                   : errMsgBase === "pwd"
-                  ? passwordValidate(e.target.value, setError, setErrMsg)
-                  : errMsgBase === "cpwd"
-                  ? confirmPasswordValidate(e.target.value, setError, setErrMsg)
-                  : null
+                  ? passwordValidate(
+                      e.target.value,
+                      setError,
+                      setErrMsg,
+                      setCanSubmit
+                    )
+                  : confirmPasswordValidate(
+                      e.target.value,
+                      setError,
+                      setErrMsg,
+                      setCanSubmit
+                    )
               }
               onChange={() => {
                 if (error) {
                   setError(false);
+                  setCanSubmit(true);
                 }
               }}
             />

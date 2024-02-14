@@ -3,9 +3,18 @@ import { emailDomain, numberChar, simpleChar } from "./validateChar";
 export const emailValidate = (
   data: string,
   setError: (error: boolean) => void,
-  setErrMsg: (errMsg: string[]) => void
+  setErrMsg: (errMsg: string[]) => void,
+  setCanSubmit: (canSubmit: boolean) => void
 ) => {
-  const inputEmail = String(data).split("@");
+  const trimmedEmail = data.trim();
+
+  if (!trimmedEmail && trimmedEmail.length > 0) {
+    setError(true);
+    setCanSubmit(false);
+    setErrMsg(["User Name cannot be empty"]);
+    return;
+  }
+  const inputEmail = String(trimmedEmail).split("@");
 
   const tempErrorMsg = [];
 
@@ -23,6 +32,7 @@ export const emailValidate = (
 
     if (!validUsername) {
       tempErrorMsg.push("Please enter a valid user name for the email address");
+      setCanSubmit(false);
     }
 
     let validDomain = false;
@@ -35,6 +45,7 @@ export const emailValidate = (
 
     if (!validDomain) {
       tempErrorMsg.push("Please enter a valid domain name");
+      setCanSubmit(false);
     }
 
     const hasErrors = !validUsername || !validDomain;
@@ -43,7 +54,7 @@ export const emailValidate = (
     setErrMsg(hasErrors ? tempErrorMsg : []);
   } else {
     setError(true);
-
+    setCanSubmit(false);
     setErrMsg(["Please enter a valid email address"]);
   }
 };

@@ -9,10 +9,19 @@ let enteredPassword: string = "";
 export const passwordValidate = (
   data: string,
   setError: (error: boolean) => void,
-  setErrMsg: (errMsg: string[]) => void
+  setErrMsg: (errMsg: string[]) => void,
+  setCanSubmit: (canSubmit: boolean) => void
 ) => {
-  const password = String(data).split("");
-  enteredPassword = data;
+  const trimmedPassword = data.trim();
+
+  if (!trimmedPassword && trimmedPassword.length > 0) {
+    setError(true);
+    setCanSubmit(false);
+    setErrMsg(["Password cannot be empty"]);
+    return;
+  }
+  const password = String(trimmedPassword).split("");
+  enteredPassword = trimmedPassword;
 
   const newErrMsgArray: string[] = [];
 
@@ -38,10 +47,12 @@ export const passwordValidate = (
       setError(false);
     } else {
       setError(true);
+      setCanSubmit(false);
       newErrMsgArray.push("Please enter a simple,capital,symbols and numbers");
     }
   } else {
     setError(true);
+    setCanSubmit(false);
     newErrMsgArray.push("Passoword length must be a 8 character");
   }
 
@@ -51,14 +62,20 @@ export const passwordValidate = (
 export const confirmPasswordValidate = (
   data: string,
   setError: (error: boolean) => void,
-  setErrMsg: (errMsg: string[]) => void
+  setErrMsg: (errMsg: string[]) => void,
+  setCanSubmit: (canSubmit: boolean) => void
 ) => {
-  if (!data && data.length < 0) {
-    if (data !== enteredPassword) {
-      setError(true);
-      setErrMsg(["Passwords do not match"]);
-    }
+  const trimmedConfirmPassword = data.trim();
+  if (!trimmedConfirmPassword) {
+    setError(true);
+    setErrMsg(["Confirm Password cannot be empty"]);
+    setCanSubmit(false);
+  } else if (trimmedConfirmPassword !== enteredPassword) {
+    setError(true);
+    setErrMsg(["Passwords do not match"]);
+    setCanSubmit(false);
   } else {
     setError(false);
+    setCanSubmit(true);
   }
 };

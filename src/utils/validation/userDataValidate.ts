@@ -4,9 +4,18 @@ export const userDataValidate = (
   data: string,
   setError: (error: boolean) => void,
   setErrMsg: (errMsg: string[]) => void,
-  errMsgBase: string
+  errMsgBase: string,
+  setCanSubmit: (canSubmit: boolean) => void
 ) => {
-  const userData = String(data).split("");
+  const trimmedUserData = data.trim();
+
+  if (!trimmedUserData && trimmedUserData.length > 0) {
+    setError(true);
+    setCanSubmit(false);
+    setErrMsg(["User Name cannot be empty"]);
+    return;
+  }
+  const userData = String(trimmedUserData).split("");
   const newErrMsgArray: string[] = [];
 
   if (errMsgBase === "username" && data.length > 0) {
@@ -20,6 +29,7 @@ export const userDataValidate = (
       } else {
         setError(true);
         valid = false;
+        setCanSubmit(false);
       }
     });
 
@@ -30,6 +40,8 @@ export const userDataValidate = (
     }
   } else {
     setError(true);
+
+    setCanSubmit(false);
 
     newErrMsgArray.push("Please enter your user name");
   }
