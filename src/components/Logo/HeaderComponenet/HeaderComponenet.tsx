@@ -38,17 +38,18 @@ function HeaderComponenet() {
   return (
     <>
       <div>
-        <div>
+        <div className="fixed w-full ">
           <nav className="flex items-center justify-between bg-slate-600 font-madimi-one">
             <div>
               <Logo />
             </div>
-            <div>
+            <div className="lg:mr-7">
               <ul className="flex">
                 {Object.entries(navBarList).map(([navItem, subItems]) => (
                   <li
                     key={navItem}
                     onClick={() => handleNavItemSelect(navItem as NavItem)}
+                    className="mx-3 text-lg lg:mx-5"
                   >
                     {navItem}
                     {selectedNavItem === navItem && (
