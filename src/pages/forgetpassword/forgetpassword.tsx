@@ -1,11 +1,10 @@
-import React, { useContext, useState } from "react";
-import Logo from "../../components/Logo/Logo";
+import React, { useState } from "react";
+
 import { InputFieldUnit } from "../loginpage/loginPage";
 import padlock from "../../assets/imges/padlock.png";
 import { VerifyOTP } from "./verifyotp";
-import Resetpassword from "./resetpassword";
+
 import { OTPRequestEmailHandle } from "../../services/data-handlers/OTPRequestEmailHandler";
-import { validUserData } from "../../context/userDataContext";
 
 const ForgetPasswordUnit = () => {
   const [canSubmit, setCanSubmit] = useState<boolean>(true);
