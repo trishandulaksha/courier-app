@@ -1,4 +1,4 @@
-import { registerUser } from "../API";
+import { API } from "../API";
 
 export interface registerUserProps {
   name: string;
@@ -42,6 +42,6 @@ export const handleRegister = async (
     confirmPassword.length > 0
   ) {
     console.log(RegisterData);
-    await registerUser("register", RegisterData, setDBResponse);
+    await API.registerUserApi("register", RegisterData, setDBResponse);
   }
 };

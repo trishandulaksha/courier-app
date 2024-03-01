@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Logo from "../../components/Logo/Logo";
-import loginPageImg from "../../assets/loginImg.png";
-import signUpPageImg from "../../assets/signupImg.png";
+import loginPageImg from "../../assets/imges/loginImg.png";
+import signUpPageImg from "../../assets/imges/signupImg.png";
 import { CSSTransition } from "react-transition-group";
 import { userDataValidate } from "../../utils/validation/userDataValidate";
 import { emailValidate } from "../../utils/validation/emailValidate";
@@ -12,17 +12,20 @@ import {
 
 import { loginHandle } from "../../services/data-handlers/loginDataHandle";
 import { handleRegister } from "../../services/data-handlers/registerDataHandle";
+import ForgetPasswordUnit from "../forgetpassword/forgetpassword";
+import { useNavigate } from "react-router-dom";
 
 // ////////////////////////////
 // LOGIN COMPONENT ////////////////////////////////
 // ///////////////////////////
-export const LoginPage = () => {
+const LoginPage = () => {
   const [changePage, setChangePage] = useState<boolean>(true);
-
+  const [moveForgetPwdPage, setMoveForgetPwdPage] = useState<boolean>(false);
+  console.log("set function called");
   return (
     <>
       <div className="items-center h-screen bg-gradient-to-r from-indigo-500">
-        <div>
+        <div className="absolute">
           <Logo />
         </div>
         <div className="flex items-center h-full">
@@ -37,28 +40,66 @@ export const LoginPage = () => {
                     unmountOnExit
                   >
                     <div className="items-center sm:flex sm:m-20">
-                      <div className="mt-14 sm:mt-0">
-                        <img
-                          src={loginPageImg}
-                          alt="couriermanimage"
-                          className="lg:w-[480px] lg:h-[480px] sm:w-[280px] sm:h-[280px] ml-7 w-[180px] h-[180px]  "
-                        />
-                      </div>
+                      {!moveForgetPwdPage ? (
+                        <div className="mt-14 sm:mt-0">
+                          <img
+                            src={loginPageImg}
+                            alt="couriermanimage"
+                            className="lg:w-[480px] lg:h-[480px] sm:w-[280px] sm:h-[280px] ml-7 w-[180px] h-[180px]  "
+                          />
+                        </div>
+                      ) : null}
 
-                      <div className="mt-6 sm:ml-28">
-                        <LoginUnit />
+                      <div className="mt-6 sm:ml-28 ">
+                        {!moveForgetPwdPage ? (
+                          <LoginUnit />
+                        ) : (
+                          <ForgetPasswordUnit />
+                        )}
                         <div className="text-center">
-                          <p>
-                            Create New Account.
-                            <span
-                              className="text-base text-blue-600 cursor-pointer"
-                              onClick={() => {
-                                setChangePage(false);
-                              }}
-                            >
-                              Sign up
-                            </span>
-                          </p>
+                          {!moveForgetPwdPage ? (
+                            <div>
+                              <div>
+                                <p>
+                                  Create New Account.
+                                  <span
+                                    className="text-base text-blue-600 cursor-pointer"
+                                    onClick={() => {
+                                      setChangePage(false);
+                                    }}
+                                  >
+                                    {"  "}
+                                    Sign up
+                                  </span>
+                                </p>
+                              </div>
+                              <div>
+                                <p>
+                                  <span
+                                    className="text-base text-blue-600 cursor-pointer"
+                                    onClick={() => {
+                                      setMoveForgetPwdPage(true);
+                                    }}
+                                  >
+                                    Forget Passowrd
+                                  </span>
+                                </p>
+                              </div>
+                            </div>
+                          ) : (
+                            <div>
+                              <p>
+                                <span
+                                  className="text-base text-blue-600 cursor-pointer"
+                                  onClick={() => {
+                                    setMoveForgetPwdPage(false);
+                                  }}
+                                >
+                                  go back
+                                </span>
+                              </p>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -114,7 +155,12 @@ export const LoginUnit = () => {
 
   const [canSubmit, setCanSubmit] = useState<boolean>(true);
   const { error, success } = dbResponse;
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
+  if (token) {
+    navigate("homepage");
+  } else navigate("login");
   return (
     <>
       <div>
@@ -130,11 +176,11 @@ export const LoginUnit = () => {
       <form onSubmit={(e) => loginHandle(e, setDBResponse, canSubmit)}>
         <div>
           <InputFieldUnit
-            type="text"
-            label="User Name"
-            placeholder="User Name"
-            name="User_Name"
-            errMsgBase="username"
+            type="email"
+            label="Email"
+            placeholder="Email "
+            name="Email"
+            errMsgBase="email"
             setCanSubmit={setCanSubmit}
           />
           <InputFieldUnit
@@ -316,3 +362,5 @@ export const InputFieldUnit = ({
     </>
   );
 };
+
+export default LoginPage;

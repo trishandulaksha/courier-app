@@ -1,12 +1,10 @@
 import React from "react";
-
-// import StartPage from "./pages/startpage/startPage";
-import { LoginPage } from "./pages/loginpage/loginPage";
+import MainRoute from "./routes/mainRoute";
 
 function App() {
   return (
     <div>
-      <LoginPage />
+      <MainRoute />
     </div>
   );
 }

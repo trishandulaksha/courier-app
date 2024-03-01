@@ -1,8 +1,16 @@
 import React from "react";
-import courierman from "../../assets/courierman.png";
+import courierman from "../../assets/imges/courierman.png";
 import Logo from "../../components/Logo/Logo";
+import { useNavigate } from "react-router-dom";
 
 const StartPage = () => {
+  const navigate = useNavigate();
+
+  const handleStartPageButton = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("function called");
+    navigate("login");
+  };
   return (
     <>
       {/* BODY CONTENT OF THE START SCREEN */}
@@ -23,7 +31,10 @@ const StartPage = () => {
               best international.courier services at zero subscription fees
             </p>
             <div>
-              <button className="px-10 py-3 mt-5 ml-10 font-semibold text-white rounded-lg lg:mt-10 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:cursor-pointer hover:rounded-2xl hover:font-extrabold">
+              <button
+                className="px-10 py-3 mt-5 ml-10 font-semibold text-white rounded-lg lg:mt-10 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:cursor-pointer hover:rounded-2xl hover:font-extrabold"
+                onClick={(e) => handleStartPageButton(e)}
+              >
                 Start Now
               </button>
             </div>

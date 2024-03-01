@@ -1,4 +1,4 @@
-import { loginUser } from "../API";
+import { API } from "../API";
 
 export interface loginUserProp {
   email: string;
@@ -25,7 +25,6 @@ export const loginHandle = async (
   };
 
   if (canSubmit && email.length > 0 && password.length > 0) {
-    await loginUser("login", loginData, setDBResponse);
-    console.log(loginData);
+    await API.loginUserApi("login", loginData, setDBResponse);
   }
 };
